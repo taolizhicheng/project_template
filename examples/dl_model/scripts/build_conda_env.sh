@@ -8,6 +8,12 @@ then
 fi
 
 # 创建conda环境
+if conda env list | awk -F' ' '{print $1}' | grep -q #{env_name}
+then
+    echo "Environment #{env_name:paper} already exists."
+    exit 1
+fi
+
 conda create -n #{env_name} python=#{python_version:3.10}
 
 # 安装依赖
