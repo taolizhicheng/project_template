@@ -73,6 +73,47 @@ def scan_directory(directory: str):
     return dirs_and_files
 
 
+def print_dirs_and_files(dirs_and_files: list):
+    """
+    @brief  打印目录和文件
+
+    @param dirs_and_files 目录和文件列表
+    """
+    file_tree = {}
+    for dir_or_file in dirs_and_files:
+        path = os.path.join(dir_or_file["root"], dir_or_file["name"])
+        if path.startswith("./"):
+            path = path[2:]
+
+        parts = path.split(os.sep)
+        current = file_tree
+        for part in parts[:-1]:
+            if part not in current:
+                current[part] = {}
+            current = current[part]
+        
+        if dir_or_file["type"] == "dir":
+            current[parts[-1]] = {}
+        else:
+            current[parts[-1]] = dir_or_file["content"]
+
+    def print_tree(node, prefix=''):
+        keys = sorted(node.keys())
+        for i, key in enumerate(keys):
+            if isinstance(node[key], dict):
+                sub_node = node[key]
+
+                colored_key = f"\033[34m{key}\033[0m"
+                print(f"{prefix}├── {colored_key}/")
+                extension = '    '
+                print_tree(sub_node, prefix + extension)
+            else:
+                colored_key = f"\033[32m{key}\033[0m"
+                print(f"{prefix}├── {colored_key}")
+
+    print_tree(file_tree)
+
+
 def check_args(args: list):
     """
     @brief  检查参数是否存在冲突，如参数名称相同，但默认值不同

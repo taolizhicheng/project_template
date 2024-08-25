@@ -96,6 +96,7 @@ def format_string(string: str, args: dict):
             arg_name, _ = arg_name.split(":")
 
         value = args[arg_name]
+        value = str(value)
 
         replace_intervals.append((start, end, value))
     

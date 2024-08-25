@@ -14,3 +14,7 @@ ARG_REGEX = r"\#\{\w+:[\s]*[\a-zA-Z0-9\_\-\.]+\}|\#\{\w+\}"
 
 # 模板名称规定
 TEMPLATE_NAME_REGEX = r"^[a-zA-Z_]\w*$"
+
+
+# 编辑器
+EDITOR = os.environ.get('EDITOR', 'vim')

@@ -17,6 +17,8 @@ def add_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
     @param project_dir  项目模板路径
     @param location_dir 项目模板存放位置
     """
+    project_dir = os.path.abspath(project_dir)
+    location_dir = os.path.abspath(location_dir)
     template_pattern = re.compile(TEMPLATE_NAME_REGEX)
     if not template_pattern.match(name):
         raise ValueError(f"Invalid template name: {name}")
@@ -72,7 +74,6 @@ def delete_template(name):
     config = save_read_json(config_file)
     os.remove(config_file)
 
-
     data = database.pop(name)
     project_dir = data["project_dir"]
     save_write_json(DATABASE_FILE, database)
@@ -87,10 +88,7 @@ def update_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
     @param name         项目模板名称
     @param project_dir  项目模板路径
     """
-    try:
-        delete_template(name)
-    except ValueError:
-        pass
+    delete_template(name)
     add_template(name, project_dir, location_dir)
 
 
@@ -120,7 +118,8 @@ def list_template_names():
     if not os.path.exists(DATABASE_FILE):
         save_write_json(DATABASE_FILE, {})
     database = save_read_json(DATABASE_FILE)
-    return database.keys()
+    names = list(database.keys())
+    return names
 
 
 def main():
