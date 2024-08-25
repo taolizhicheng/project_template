@@ -6,7 +6,7 @@ project-template \
 --add \ 
 --name <template-name> \ 
 --project-dir <project-dir> \ 
---save-dir <save-dir> # optional, path to save template
+--template-dir <save-dir> # optional, path to save template
 ```
 
 根据项目路径更新项目模板
@@ -15,7 +15,7 @@ project-template \
 --update \ 
 --name <template-name> \ 
 --project-dir <project-dir> \ 
---save-dir <save-dir>  # optional, path to save template
+--template-dir <save-dir>  # optional, path to save template
 ```
 
 删除项目模板

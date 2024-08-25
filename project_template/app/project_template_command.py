@@ -154,6 +154,7 @@ def main():
                     sys.exit("取消操作")
 
         instantiate_project(args.name, args.project_dir, required_args)
+        print(f"instantiate project {args.project_dir} from template {args.name}")
 
 
 if __name__ == "__main__":

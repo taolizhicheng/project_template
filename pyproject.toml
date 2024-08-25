@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project_template"
+version = "0.0.4"
+authors = [{ name = "MoYuZai", email = "moyu.email@gamil.com" }]
+description = "Instantiate project from template"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/taolizhicheng/project_template"
+Issues = "https://github.com/taolizhicheng/project_template/issues"
+
+[project.scripts]
+# 参考 https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#creating-executable-scripts
+# 生成可执行文件，以下命令等同于 `from project_template.app.project_template_command import main; main()`
+project_template = "project_template.app.project_template_command:main"
+
