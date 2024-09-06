@@ -26,3 +26,5 @@ Issues = "https://github.com/taolizhicheng/project_template/issues"
 # 生成可执行文件，以下命令等同于 `from project_template.app.project_template_command import main; main()`
 project_template = "project_template.app.project_template_command:main"
 
+[tool.setuptools]
+py-modules = []
