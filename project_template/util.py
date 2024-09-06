@@ -33,6 +33,9 @@ def save_read_json(file_path):
     @param file_path 文件路径
     @return 文件中的json内容
     """
+    if not os.path.exists(file_path):
+        return {}
+
     with open(file_path, "r") as f:
         fcntl.flock(f, fcntl.LOCK_SH)
         try:

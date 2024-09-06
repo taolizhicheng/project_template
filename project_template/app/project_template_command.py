@@ -99,6 +99,9 @@ def main():
     elif args.list:
         if args.name is None:
             template_names = list_template_names()
+            if len(template_names) == 0:
+                print("No templates found")
+                return
             longest_name = max(len(name) for name in template_names)
             for name in template_names:
                 project_dir, config = get_template(name)
