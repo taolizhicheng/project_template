@@ -122,6 +122,75 @@ def list_template_names():
     return names
 
 
+def generate_template(project_dir, template_dir, rules: dict):
+    """
+    @brief  根据配置文件和现有项目生成项目模板
+
+    @param project_dir  现有项目路径
+    @param template_dir 项目模板存放位置
+    @param rules        规则说明
+    """
+    project_dir = os.path.abspath(project_dir)
+    template_dir = os.path.abspath(template_dir)
+    if not os.path.exists(project_dir):
+        raise ValueError(f"Project directory does not exist: {project_dir}")
+    if not os.path.isdir(project_dir):
+        raise ValueError(f"Project directory is not a directory: {project_dir}")
+    
+    if os.path.exists(template_dir):
+        raise ValueError(f"Template directory already exists: {template_dir}")
+    else:
+        os.makedirs(template_dir)
+
+    ignore_files = rules.get("ignore_files", [])
+    rules = rules.get("rules", [])
+    
+    dirs_and_files = scan_directory(project_dir, ignore_files)
+
+    for dir_or_file in dirs_and_files:
+        name = dir_or_file["name"]
+        type_ = dir_or_file["type"]
+        root = dir_or_file["root"]
+        mode = dir_or_file["mode"]
+        content = dir_or_file["content"]
+
+        file_path = os.path.join(root, name)
+
+        if type_ == "file":
+            for rule in rules:
+                value_name = rule.get("value_name", None)
+                if value_name is None:
+                    continue
+
+                default_value = rule.get("default_value", None)
+                if default_value is None:
+                    replace_name = f"#{{{value_name}}}"
+                else:
+                    replace_name = f"#{{{value_name}:{default_value}}}"
+                file_path = file_path.replace(value_name, replace_name)
+                content = content.replace(value_name, replace_name)
+            
+            new_file_path = os.path.join(template_dir, file_path)
+            with open(new_file_path, "w") as f:
+                f.write(content)
+
+        elif type_ == "dir":
+            for rule in rules:
+                value_name = rule.get("value_name", None)
+                if value_name is None:
+                    continue
+                
+                default_value = rule.get("default_value", None)
+                if default_value is None:
+                    replace_name = f"#{{{value_name}}}"
+                else:
+                    replace_name = f"#{{{value_name}:{default_value}}}"
+                file_path = file_path.replace(value_name, replace_name)
+            
+            new_dir_path = os.path.join(template_dir, file_path)
+            os.makedirs(new_dir_path, exist_ok=True)
+
+
 def main():
     add_template("test", "./examples/dl_model")
 

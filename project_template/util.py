@@ -2,6 +2,7 @@ import os
 import re
 import json
 import fcntl
+import fnmatch
 
 from project_template.constants import ARG_REGEX
 
@@ -123,3 +124,24 @@ def format_string(string: str, args: dict):
     final_string += string[end:]
 
     return final_string
+
+
+def whether_ignore_file(file_path: str, ignore_pattern: str):
+    """
+    @brief  判断文件是否需要忽略
+    @detail 判断文件是否需要忽略，使用 fnmatch 进行匹配
+
+    @param  file_path 文件路径
+    @param  ignore_pattern 忽略模式
+    @return 是否需要忽略
+    """
+    full_pattern = "*/" + ignore_pattern
+    if ignore_pattern.endswith("/"):
+        full_pattern += "*"
+    to_ignore1 = fnmatch.fnmatch(file_path, full_pattern)
+    
+    full_pattern = "*/" + ignore_pattern
+    full_pattern = full_pattern.rstrip("/")
+    to_ignore2 = fnmatch.fnmatch(file_path, full_pattern)
+
+    return to_ignore1 or to_ignore2

@@ -1,12 +1,12 @@
 import os
 
-from project_template.util import scan_args_for_string
+from project_template.util import scan_args_for_string, whether_ignore_file
 
 
 __all__ = ["scan_directory", "scan_args"]
 
 
-def scan_directory(directory: str):
+def scan_directory(directory: str, ignore_files: list):
     """
     @brief      扫描目录
     @details    扫描目录中的所有文件和目录，并返回，格式如下
@@ -30,13 +30,14 @@ def scan_directory(directory: str):
     ```
 
     @param directory 目录路径
+    @param ignore_files 忽略的文件列表
     @return 目录中的所有文件和目录
     """
     if not os.path.exists(directory):
         raise ValueError(f"Directory does not exist: {directory}")
     if not os.path.isdir(directory):
         raise ValueError(f"Not a directory: {directory}")
-    
+
     directory = os.path.abspath(directory)
     dirs_and_files = []
 
@@ -46,6 +47,15 @@ def scan_directory(directory: str):
             type_ = "file"
             relative_root = os.path.relpath(root, directory)
             path = os.path.join(root, file)
+
+            to_continue = False
+            for ignore_file in ignore_files:
+                if whether_ignore_file(path, ignore_file):
+                    to_continue = True
+                    break
+            if to_continue:
+                continue
+
             file_mode = os.stat(path).st_mode
             with open(path, "r") as f:
                 content = f.read()
@@ -61,6 +71,15 @@ def scan_directory(directory: str):
             type_ = "dir"
             relative_root = os.path.relpath(root, directory)
             path = os.path.join(root, dir)
+
+            to_continue = False
+            for ignore_file in ignore_files:
+                if whether_ignore_file(path, ignore_file):
+                    to_continue = True
+                    break
+            if to_continue:
+                continue
+
             dir_mode = os.stat(path).st_mode
             dirs_and_files.append({
                 "name": name,
