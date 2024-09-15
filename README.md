@@ -178,6 +178,100 @@ project-template --instantiate --name dl_model --project-dir /tmp/test
 
 ![image4](./assets/image4.png)
 
+### 根据项目生成模板
+
+从一个现有项目中抽取变量，并生成模板。
+
+这样一来，可以进行项目的验证后，再转为模板，避免出现模板项目不可编译运行的问题。
+
+运行命令：
+```shell
+project_template --generate --project-dir <project-dir> --template-dir <save-dir> --rule-file <rule-file>
+```
+
+其中，`project-dir`为现有项目目录，`template-dir`为模板目录路径，`rule-file`为规则文件路径。
+
+规则文件为json格式，内容如下：
+```json
+{
+    "ignore_files": [
+        ".git/",
+        ".DS_Store",
+        ".idea/",
+        ".vscode/"
+    ],
+    "rules": [
+        {
+            "value_name": "arg1"
+        },
+        {
+            "value_name": "arg2",
+            "default_value": "aaa"
+        }
+    ]
+}
+```
+
+`ignore_files`为需要忽略的文件，`rules`存放需要抽取的变量，`value_name`为变量名，`default_value`为变量默认值。
+
+具体例子，假设有如下项目结构（即`--project-dir`）：
+```text
+|-- root/
+    |-- .gitignore
+    |-- aa.py
+    |-- main.py
+    |-- utils.py
+    |-- README.md
+```
+
+其中，`aa.py`文件内容如下：
+```python
+class A:
+    def __init__(self):
+        self.a = 1
+```
+
+`rule-file`内容如下：
+```json
+{
+    "ignore_files": [
+        ".gitignore"
+    ],
+    "rules": [
+        {
+            "value_name": "aa"
+        },
+        {
+            "value_name": "A",
+            "default_value": "Example"
+        }
+    ]
+}
+```
+
+那么，运行命令
+```shell
+project_template --generate --project-dir <project-dir> --template-dir <save-dir> --rule-file <rule-file>
+```
+
+会生成模板如下：
+```text
+|-- root/
+    |-- #{aa}.py
+    |-- main.py
+    |-- utils.py
+    |-- README.md
+```
+
+其中，`#{aa}.py`文件内容如下：
+```python
+class #{A:Example}:
+    def __init__(self):
+        self.a = 1
+```
+
+然后，通过`project-template --add`方式加入到模板库即可。
+
 ## 开发逻辑
 
 ![image1](./assets/image1.png)
