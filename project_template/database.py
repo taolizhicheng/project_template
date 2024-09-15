@@ -41,7 +41,7 @@ def add_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
     if name in database:
         raise ValueError(f"Template already exists: {name}. If you want to update the template, please use update_template function.")
 
-    dirs_and_files = scan_directory(project_dir)
+    dirs_and_files = scan_directory(project_dir, [])
     args = scan_args(dirs_and_files)
     config = {
         "dirs_and_files": dirs_and_files,

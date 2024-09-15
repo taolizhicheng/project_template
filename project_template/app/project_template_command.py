@@ -31,7 +31,15 @@ def get_values(init_message):
         if line.startswith("#"):
             continue
 
-        name, value = line.split(":")
+        info = line.split(":")
+        if len(info) == 1:
+            name = info[0].strip()
+            value = None
+        elif len(info) == 2:
+            name, value = info
+        else:
+            name, value = info[:2]
+
         name = name.strip()
         value = value.strip()
         if value == "":
