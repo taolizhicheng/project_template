@@ -153,7 +153,11 @@ def main():
             init_message += "# Please provide values for the following variables:\n"
             for name, default_value in required_args.items():
                 if default_value is None:
-                    init_message += f"{name}: \n"
+                    default_env_value = os.environ.get(name, None)
+                    if default_env_value is not None:
+                        init_message += f"{name}: {default_env_value}\n"
+                    else:
+                        init_message += f"{name}: \n"
                 else:
                     init_message += f"{name}: {default_value}\n"
 

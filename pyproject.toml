@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "project_template"
-version = "0.0.7"
+version = "0.0.8"
 authors = [{ name = "MoYuZai", email = "moyu.email@gamil.com" }]
 description = "Instantiate project from template"
 readme = "README.md"
@@ -28,5 +28,5 @@ project_template = "project_template.app.project_template_command:main"
 
 [tool.setuptools]
 py-modules = []
-packages = ["project_template"]
+packages = ["project_template", "project_template.app"]
 package-dir = { "" = "." }
