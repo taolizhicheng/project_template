@@ -82,8 +82,15 @@ def main():
         if args.project_dir is None:
             parser._print_message("project-dir is required", file=sys.stderr)
             return
+
+        if args.rule_file is not None:
+            rules = save_read_json(args.rule_file)
+            ignore_files = rules.get("ignore_files", [])
+        else:
+            ignore_files = []
+
         if args.template_dir is None:
-            add_template(args.name, args.project_dir)
+            add_template(args.name, args.project_dir, ignore_files=ignore_files)
             print(f"add template {args.name} from {args.project_dir} to {DEFAULT_TEMPLATE_DIR}")
         else:
             add_template(args.name, args.project_dir, args.template_dir)
@@ -95,8 +102,15 @@ def main():
         if args.project_dir is None:
             parser._print_message("project-dir is required", file=sys.stderr)
             return
+
+        if args.rule_file is not None: 
+            rules = save_read_json(args.rule_file)
+            ignore_files = rules.get("ignore_files", [])
+        else:
+            ignore_files = []
+
         if args.template_dir is None:
-            update_template(args.name, args.project_dir)
+            update_template(args.name, args.project_dir, ignore_files=ignore_files)
             print(f"update template {args.name} from {args.project_dir} to {DEFAULT_TEMPLATE_DIR}")
         else:
             update_template(args.name, args.project_dir, args.template_dir)

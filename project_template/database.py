@@ -9,13 +9,14 @@ __all__ = ["add_template", "delete_template", "update_template", "get_template",
 
 
 
-def add_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
+def add_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR, ignore_files=[]):
     """
     @brief  根据项目模板创建项目
 
     @param name         项目模板名称
     @param project_dir  项目模板路径
     @param location_dir 项目模板存放位置
+    @param ignore_files 忽略文件列表
     """
     project_dir = os.path.abspath(project_dir)
     location_dir = os.path.abspath(location_dir)
@@ -41,7 +42,7 @@ def add_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
     if name in database:
         raise ValueError(f"Template already exists: {name}. If you want to update the template, please use update_template function.")
 
-    dirs_and_files = scan_directory(project_dir, [])
+    dirs_and_files = scan_directory(project_dir, ignore_files)
     args = scan_args(dirs_and_files)
     config = {
         "dirs_and_files": dirs_and_files,
@@ -81,7 +82,7 @@ def delete_template(name):
     return project_dir, config
 
 
-def update_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
+def update_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR, ignore_files=[]):
     """
     @brief  更新项目模板
 
@@ -89,7 +90,7 @@ def update_template(name, project_dir, location_dir=DEFAULT_TEMPLATE_DIR):
     @param project_dir  项目模板路径
     """
     delete_template(name)
-    add_template(name, project_dir, location_dir)
+    add_template(name, project_dir, location_dir, ignore_files)
 
 
 def get_template(name):
